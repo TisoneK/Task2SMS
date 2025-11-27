@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: task2sms-db
+    environment:
+      POSTGRES_USER: task2sms
+      POSTGRES_PASSWORD: task2sms_password
+      POSTGRES_DB: task2sms
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U task2sms"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: task2sms-backend
+    environment:
+      DATABASE_URL: postgresql://task2sms:task2sms_password@postgres:5432/task2sms
+      SECRET_KEY: ${SECRET_KEY:-your-secret-key-change-in-production}
+      AFRICASTALKING_USERNAME: ${AFRICASTALKING_USERNAME}
+      AFRICASTALKING_API_KEY: ${AFRICASTALKING_API_KEY}
+      TWILIO_ACCOUNT_SID: ${TWILIO_ACCOUNT_SID}
+      TWILIO_AUTH_TOKEN: ${TWILIO_AUTH_TOKEN}
+      TWILIO_PHONE_NUMBER: ${TWILIO_PHONE_NUMBER}
+      GSM_MODEM_PORT: ${GSM_MODEM_PORT}
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./backend:/app
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: task2sms-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+
