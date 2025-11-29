@@ -38,7 +38,7 @@ Task2SMS is a web-based automation tool that lets users create and manage tasks 
 ## Quick Start
 
 ### Prerequisites
-- Python 3.12+
+- Python 3.12
 - Node.js 18+
 - PostgreSQL (optional, SQLite works for development)
 
