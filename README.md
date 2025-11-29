@@ -72,6 +72,83 @@ Notes:
 - The `Invoke-WebRequest` step downloads the Rust installer and runs it non-interactively (`-y`).
 - If you prefer a GUI installer or need a different architecture, visit https://www.rust-lang.org/tools/install.
 
+### Add Rust to PATH
+
+#### PowerShell (Permanent - Recommended)
+
+**Add to User PATH:**
+
+```powershell
+[Environment]::SetEnvironmentVariable(
+    "Path",
+    [Environment]::GetEnvironmentVariable("Path", "User") + ";$env:USERPROFILE\.cargo\bin",
+    "User"
+)
+```
+
+**Add to System PATH (Requires Admin):**
+
+```powershell
+[Environment]::SetEnvironmentVariable(
+    "Path",
+    [Environment]::GetEnvironmentVariable("Path", "Machine") + ";$env:USERPROFILE\.cargo\bin",
+    "Machine"
+)
+```
+
+#### Command Prompt (Permanent)
+
+**Add to User PATH:**
+
+```cmd
+setx PATH "%PATH%;%USERPROFILE%\.cargo\bin"
+```
+
+**Add to System PATH (Requires Admin):**
+
+```cmd
+setx /M PATH "%PATH%;%USERPROFILE%\.cargo\bin"
+```
+
+#### Apply Changes to Current Session
+
+After setting the environment variable, refresh the current session:
+
+**PowerShell:**
+
+```powershell
+$env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
+```
+
+**Command Prompt:**
+
+```cmd
+set PATH=%PATH%;%USERPROFILE%\.cargo\bin
+```
+
+#### Linux/Mac (Bash/Zsh)
+
+If you're on Linux or Mac, add to ~/.bashrc or ~/.zshrc:
+
+```bash
+export PATH="$HOME/.cargo/bin:$PATH"
+```
+
+Then reload:
+
+```bash
+source ~/.bashrc  # or ~/.zshrc
+```
+
+#### Verify
+
+After running any of the above, verify with:
+
+```powershell
+rustc --version
+cargo --version
+```
+
 ### Development Setup
 
 1. **Clone the repository**
