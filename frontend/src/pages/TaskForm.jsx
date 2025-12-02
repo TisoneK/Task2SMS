@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
+import { useTheme } from '../context/ThemeContext';
 import { tasksAPI } from '../services/api';
 import toast from 'react-hot-toast';
-import { 
+import {
   ArrowLeft, Plus, X, Database, Filter, Smartphone, ArrowRight,
   Clock, Bell, Zap, CheckCircle
 } from 'lucide-react';
@@ -29,6 +30,7 @@ function TaskForm() {
   const [conditionValue, setConditionValue] = useState('');
   const [conditionField, setConditionField] = useState('');
   const [loading, setLoading] = useState(false);
+  const { isDark } = useTheme();
 
   useEffect(() => {
     if (isEdit) {
@@ -126,10 +128,12 @@ function TaskForm() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-white shadow">
+    <div className={`min-h-screen ${isDark ? 'bg-gray-900' : 'bg-gray-50'}`}>
+      <header className={`${isDark ? 'bg-gray-800' : 'bg-white'} shadow`}>
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <Link to="/dashboard" className="flex items-center gap-2 text-gray-600 hover:text-gray-900">
+          <Link to="/dashboard" className={`flex items-center gap-2 hover:transition-colors ${
+            isDark ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'
+          }`}>
             <ArrowLeft className="w-5 h-5" />
             Back to Dashboard
           </Link>
@@ -138,45 +142,59 @@ function TaskForm() {
 
       <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+          <h1 className={`text-3xl font-bold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
             {isEdit ? 'Edit Automation' : 'Create New Automation'}
           </h1>
-          <p className="text-gray-600">
+          <p className={isDark ? 'text-gray-400' : 'text-gray-600'}>
             Set up your SMS automation workflow with triggers, conditions, and actions
           </p>
         </div>
 
         {/* Workflow Visualization */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+        <div className={`rounded-lg shadow-sm border p-6 mb-8 ${
+          isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
+        }`}>
           <div className="flex items-center justify-center gap-4 text-sm">
-            <div className="flex items-center gap-2 px-4 py-2 bg-blue-50 border border-blue-200 rounded-lg">
-              <Database className="w-5 h-5 text-blue-600" />
-              <span className="font-medium text-blue-900">Data Source</span>
+            <div className={`flex items-center gap-2 px-4 py-2 rounded-lg ${
+              isDark ? 'bg-blue-900 border-blue-700' : 'bg-blue-50 border-blue-200'
+            }`}>
+              <Database className={`w-5 h-5 ${isDark ? 'text-blue-400' : 'text-blue-600'}`} />
+              <span className={`font-medium ${isDark ? 'text-blue-300' : 'text-blue-900'}`}>Data Source</span>
             </div>
-            <ArrowRight className="w-5 h-5 text-gray-400" />
-            <div className="flex items-center gap-2 px-4 py-2 bg-purple-50 border border-purple-200 rounded-lg">
-              <Filter className="w-5 h-5 text-purple-600" />
-              <span className="font-medium text-purple-900">Conditions</span>
+            <ArrowRight className={`w-5 h-5 ${isDark ? 'text-gray-600' : 'text-gray-400'}`} />
+            <div className={`flex items-center gap-2 px-4 py-2 rounded-lg ${
+              isDark ? 'bg-purple-900 border-purple-700' : 'bg-purple-50 border-purple-200'
+            }`}>
+              <Filter className={`w-5 h-5 ${isDark ? 'text-purple-400' : 'text-purple-600'}`} />
+              <span className={`font-medium ${isDark ? 'text-purple-300' : 'text-purple-900'}`}>Conditions</span>
             </div>
-            <ArrowRight className="w-5 h-5 text-gray-400" />
-            <div className="flex items-center gap-2 px-4 py-2 bg-green-50 border border-green-200 rounded-lg">
-              <Smartphone className="w-5 h-5 text-green-600" />
-              <span className="font-medium text-green-900">SMS Action</span>
+            <ArrowRight className={`w-5 h-5 ${isDark ? 'text-gray-600' : 'text-gray-400'}`} />
+            <div className={`flex items-center gap-2 px-4 py-2 rounded-lg ${
+              isDark ? 'bg-green-900 border-green-700' : 'bg-green-50 border-green-200'
+            }`}>
+              <Smartphone className={`w-5 h-5 ${isDark ? 'text-green-400' : 'text-green-600'}`} />
+              <span className={`font-medium ${isDark ? 'text-green-300' : 'text-green-900'}`}>SMS Action</span>
             </div>
           </div>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-8">
           {/* Step 1: Basic Info */}
-          <div className="bg-white rounded-lg shadow p-6">
-            <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center gap-2">
-              <div className="w-8 h-8 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center font-medium">1</div>
+          <div className={`rounded-lg shadow p-6 ${isDark ? 'bg-gray-800' : 'bg-white'}`}>
+            <h2 className={`text-xl font-semibold mb-6 flex items-center gap-2 ${
+              isDark ? 'text-white' : 'text-gray-900'
+            }`}>
+              <div className={`w-8 h-8 rounded-full flex items-center justify-center font-medium ${
+                isDark ? 'bg-indigo-900 text-indigo-400' : 'bg-indigo-100 text-indigo-600'
+              }`}>1</div>
               Basic Information
             </h2>
             
             <div className="grid md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className={`block text-sm font-medium mb-2 ${
+                  isDark ? 'text-gray-300' : 'text-gray-700'
+                }`}>
                   Automation Name *
                 </label>
                 <input
@@ -185,13 +203,19 @@ function TaskForm() {
                   required
                   value={formData.name}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                  className={`w-full px-3 py-2 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 ${
+                    isDark
+                      ? 'bg-gray-700 border-gray-600 text-white'
+                      : 'bg-white border-gray-300 text-gray-900'
+                  }`}
                   placeholder="e.g., Game Score Alerts"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className={`block text-sm font-medium mb-2 ${
+                  isDark ? 'text-gray-300' : 'text-gray-700'
+                }`}>
                   Data Source URL
                 </label>
                 <input
@@ -199,14 +223,20 @@ function TaskForm() {
                   name="source_link"
                   value={formData.source_link}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                  className={`w-full px-3 py-2 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 ${
+                    isDark
+                      ? 'bg-gray-700 border-gray-600 text-white'
+                      : 'bg-white border-gray-300 text-gray-900'
+                  }`}
                   placeholder="https://api.example.com/data"
                 />
               </div>
             </div>
 
             <div className="mt-6">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className={`block text-sm font-medium mb-2 ${
+                isDark ? 'text-gray-300' : 'text-gray-700'
+              }`}>
                 Description
               </label>
               <textarea
@@ -214,7 +244,11 @@ function TaskForm() {
                 value={formData.description}
                 onChange={handleChange}
                 rows={3}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className={`w-full px-3 py-2 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 ${
+                  isDark
+                    ? 'bg-gray-700 border-gray-600 text-white'
+                    : 'bg-white border-gray-300 text-gray-900'
+                }`}
                 placeholder="Describe what this automation does and when it should trigger..."
               />
             </div>

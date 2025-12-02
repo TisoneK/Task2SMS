@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
 import { tasksAPI } from '../services/api';
 import toast from 'react-hot-toast';
 import {
   Plus, LogOut, Bell, Clock, ToggleLeft, ToggleRight, Trash2, Edit, Eye,
   Zap, Activity, AlertCircle, CheckCircle, TrendingUp, Users, BarChart3,
-  ArrowRight, Database, Smartphone, Filter, PlayCircle, PauseCircle
+  ArrowRight, Database, Smartphone, Filter, PlayCircle, PauseCircle, Moon, Sun
 } from 'lucide-react';
 
 function Dashboard() {
@@ -19,6 +20,7 @@ function Dashboard() {
     totalNotifications: 0
   });
   const { user, logout } = useAuth();
+  const { theme, toggleTheme, isDark } = useTheme();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -115,36 +117,59 @@ function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className={`min-h-screen ${isDark ? 'bg-gray-900' : 'bg-gray-50'}`}>
       {/* Header */}
-      <header className="bg-white shadow-sm border-b">
+      <header className={`${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white shadow-sm border-b'}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-3">
               <div className="flex items-center gap-2">
-                <Zap className="w-8 h-8 text-indigo-600" />
-                <h1 className="text-2xl font-bold text-gray-900">Task2SMS</h1>
+                <Zap className={`w-8 h-8 ${isDark ? 'text-indigo-400' : 'text-indigo-600'}`} />
+                <h1 className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>Task2SMS</h1>
               </div>
-              <span className="text-sm text-gray-500">Automation Platform</span>
+              <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Automation Platform</span>
             </div>
-            <div className="flex gap-4">
+            <div className="flex gap-4 items-center">
+              <button
+                onClick={toggleTheme}
+                className={`flex items-center gap-2 px-3 py-2 rounded-md transition-colors ${
+                  isDark
+                    ? 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+                title="Toggle theme"
+              >
+                {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+              </button>
               <Link
                 to="/analytics"
-                className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:text-indigo-600"
+                className={`flex items-center gap-2 px-4 py-2 rounded-md transition-colors ${
+                  isDark
+                    ? 'text-gray-300 hover:text-indigo-400'
+                    : 'text-gray-700 hover:text-indigo-600'
+                }`}
               >
                 <BarChart3 className="w-5 h-5" />
                 Analytics
               </Link>
               <Link
                 to="/notifications"
-                className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:text-indigo-600"
+                className={`flex items-center gap-2 px-4 py-2 rounded-md transition-colors ${
+                  isDark
+                    ? 'text-gray-300 hover:text-indigo-400'
+                    : 'text-gray-700 hover:text-indigo-600'
+                }`}
               >
                 <Bell className="w-5 h-5" />
                 Notifications
               </Link>
               <button
                 onClick={handleLogout}
-                className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:text-red-600"
+                className={`flex items-center gap-2 px-4 py-2 rounded-md transition-colors ${
+                  isDark
+                    ? 'text-gray-300 hover:text-red-400'
+                    : 'text-gray-700 hover:text-red-600'
+                }`}
               >
                 <LogOut className="w-5 h-5" />
                 Logout
@@ -158,30 +183,30 @@ function Dashboard() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Welcome Section */}
         <div className="mb-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">
+          <h2 className={`text-3xl font-bold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
             Welcome back, {user?.username}!
           </h2>
-          <p className="text-gray-600">Manage your SMS automations and monitor their performance</p>
+          <p className={isDark ? 'text-gray-400' : 'text-gray-600'}>Manage your SMS automations and monitor their performance</p>
         </div>
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white rounded-lg shadow p-6">
+          <div className={`${isDark ? 'bg-gray-800' : 'bg-white'} rounded-lg shadow p-6`}>
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Total Automations</p>
-                <p className="text-2xl font-bold text-gray-900">{stats.total}</p>
+                <p className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Total Automations</p>
+                <p className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>{stats.total}</p>
               </div>
-              <div className="p-3 bg-indigo-100 rounded-full">
-                <Zap className="w-6 h-6 text-indigo-600" />
+              <div className={`p-3 rounded-full ${isDark ? 'bg-indigo-900' : 'bg-indigo-100'}`}>
+                <Zap className={`w-6 h-6 ${isDark ? 'text-indigo-400' : 'text-indigo-600'}`} />
               </div>
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow p-6">
+          <div className={`${isDark ? 'bg-gray-800' : 'bg-white'} rounded-lg shadow p-6`}>
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Active</p>
+                <p className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Active</p>
                 <p className="text-2xl font-bold text-green-600">{stats.active}</p>
               </div>
               <div className="p-3 bg-green-100 rounded-full">
@@ -190,26 +215,26 @@ function Dashboard() {
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow p-6">
+          <div className={`${isDark ? 'bg-gray-800' : 'bg-white'} rounded-lg shadow p-6`}>
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Inactive</p>
-                <p className="text-2xl font-bold text-gray-600">{stats.inactive}</p>
+                <p className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Inactive</p>
+                <p className={`text-2xl font-bold ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>{stats.inactive}</p>
               </div>
-              <div className="p-3 bg-gray-100 rounded-full">
-                <PauseCircle className="w-6 h-6 text-gray-600" />
+              <div className={`p-3 rounded-full ${isDark ? 'bg-gray-700' : 'bg-gray-100'}`}>
+                <PauseCircle className={`w-6 h-6 ${isDark ? 'text-gray-400' : 'text-gray-600'}`} />
               </div>
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow p-6">
+          <div className={`${isDark ? 'bg-gray-800' : 'bg-white'} rounded-lg shadow p-6`}>
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Total Recipients</p>
+                <p className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Total Recipients</p>
                 <p className="text-2xl font-bold text-indigo-600">{stats.totalNotifications}</p>
               </div>
-              <div className="p-3 bg-indigo-100 rounded-full">
-                <Users className="w-6 h-6 text-indigo-600" />
+              <div className={`p-3 rounded-full ${isDark ? 'bg-indigo-900' : 'bg-indigo-100'}`}>
+                <Users className={`w-6 h-6 ${isDark ? 'text-indigo-400' : 'text-indigo-600'}`} />
               </div>
             </div>
           </div>
@@ -218,8 +243,8 @@ function Dashboard() {
         {/* Automations Section */}
         <div className="mb-6 flex justify-between items-center">
           <div>
-            <h2 className="text-xl font-semibold text-gray-900">Your Automations</h2>
-            <p className="text-sm text-gray-600 mt-1">Create and manage your SMS automation workflows</p>
+            <h2 className={`text-xl font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>Your Automations</h2>
+            <p className={`text-sm mt-1 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Create and manage your SMS automation workflows</p>
           </div>
           <Link
             to="/tasks/new"
@@ -232,14 +257,14 @@ function Dashboard() {
 
         {loading ? (
           <div className="text-center py-12">
-            <div className="text-gray-600">Loading automations...</div>
+            <div className={isDark ? 'text-gray-400' : 'text-gray-600'}>Loading automations...</div>
           </div>
         ) : tasks.length === 0 ? (
-          <div className="text-center py-12 bg-white rounded-lg shadow">
+          <div className={`text-center py-12 rounded-lg shadow ${isDark ? 'bg-gray-800' : 'bg-white'}`}>
             <div className="max-w-md mx-auto">
-              <Zap className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No automations yet</h3>
-              <p className="text-gray-600 mb-6">
+              <Zap className={`w-16 h-16 mx-auto mb-4 ${isDark ? 'text-gray-600' : 'text-gray-400'}`} />
+              <h3 className={`text-lg font-medium mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>No automations yet</h3>
+              <p className={`mb-6 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
                 Create your first SMS automation to connect data sources with SMS notifications
               </p>
               <Link
@@ -254,15 +279,17 @@ function Dashboard() {
         ) : (
           <div className="space-y-6">
             {tasks.map((task) => (
-              <div key={task.id} className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+              <div key={task.id} className={`rounded-lg shadow-sm border overflow-hidden ${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'}`}>
                 {/* Automation Header */}
-                <div className="p-6 border-b border-gray-200">
+                <div className={`p-6 border-b ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
                   <div className="flex justify-between items-start">
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
-                        <h3 className="text-lg font-semibold text-gray-900">{task.name}</h3>
+                        <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>{task.name}</h3>
                         <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${
-                          task.is_active ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
+                          task.is_active
+                            ? 'bg-green-100 text-green-800'
+                            : isDark ? 'bg-gray-700 text-gray-300' : 'bg-gray-100 text-gray-800'
                         }`}>
                           {task.is_active ? (
                             <>
@@ -278,11 +305,11 @@ function Dashboard() {
                         </span>
                       </div>
                       {task.description && (
-                        <p className="text-gray-600 text-sm mb-3">{task.description}</p>
+                        <p className={`text-sm mb-3 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>{task.description}</p>
                       )}
-                      
+                       
                       {/* Workflow Visualization */}
-                      <div className="flex items-center gap-2 text-sm text-gray-600">
+                      <div className={`flex items-center gap-2 text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
                         <div className="flex items-center gap-1">
                           <Database className="w-4 h-4" />
                           <span>Data Source</span>
@@ -299,10 +326,10 @@ function Dashboard() {
                         </div>
                       </div>
                     </div>
-                    
+                   
                     <button
                       onClick={() => handleToggle(task.id)}
-                      className="ml-4 text-gray-500 hover:text-indigo-600"
+                      className={`ml-4 ${isDark ? 'text-gray-500 hover:text-indigo-400' : 'text-gray-500 hover:text-indigo-600'}`}
                     >
                       {task.is_active ? (
                         <ToggleRight className="w-8 h-8 text-green-600" />
@@ -314,17 +341,17 @@ function Dashboard() {
                 </div>
 
                 {/* Automation Details */}
-                <div className="px-6 py-4 bg-gray-50">
+                <div className={`px-6 py-4 ${isDark ? 'bg-gray-700' : 'bg-gray-50'}`}>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-                    <div className="flex items-center gap-2 text-gray-600">
+                    <div className={`flex items-center gap-2 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
                       <Clock className="w-4 h-4" />
                       <span>Schedule: {task.schedule_human || task.schedule_cron || 'Manual'}</span>
                     </div>
-                    <div className="flex items-center gap-2 text-gray-600">
+                    <div className={`flex items-center gap-2 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
                       <Bell className="w-4 h-4" />
                       <span>{task.recipients?.length || 0} recipients</span>
                     </div>
-                    <div className="flex items-center gap-2 text-gray-600">
+                    <div className={`flex items-center gap-2 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
                       <Activity className="w-4 h-4" />
                       <span>Last run: {task.last_run ? new Date(task.last_run).toLocaleDateString() : 'Never'}</span>
                     </div>
@@ -332,11 +359,15 @@ function Dashboard() {
                 </div>
 
                 {/* Actions */}
-                <div className="px-6 py-3 bg-gray-50 border-t border-gray-200">
+                <div className={`px-6 py-3 border-t ${isDark ? 'bg-gray-700 border-gray-600' : 'bg-gray-50 border-gray-200'}`}>
                   <div className="flex gap-2">
                     <Link
                       to={`/tasks/${task.id}`}
-                      className="flex items-center gap-2 px-3 py-2 text-sm bg-white border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50"
+                      className={`flex items-center gap-2 px-3 py-2 text-sm rounded-md hover:transition-colors ${
+                        isDark
+                          ? 'bg-gray-600 border-gray-500 text-gray-200 hover:bg-gray-500'
+                          : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
+                      }`}
                     >
                       <Eye className="w-4 h-4" />
                       View Details

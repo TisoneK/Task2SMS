@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
 import { tasksAPI, notificationsAPI } from '../services/api';
 import toast from 'react-hot-toast';
-import { 
-  ArrowLeft, BarChart3, TrendingUp, TrendingDown, Bell, Smartphone, 
+import {
+  ArrowLeft, BarChart3, TrendingUp, TrendingDown, Bell, Smartphone,
   Clock, CheckCircle, XCircle, AlertCircle, Users, Activity, Zap,
   Calendar, Filter, Download
 } from 'lucide-react';
@@ -23,6 +24,7 @@ function Analytics() {
   const [loading, setLoading] = useState(true);
   const [timeRange, setTimeRange] = useState('7d');
   const { user, logout } = useAuth();
+  const { isDark } = useTheme();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -190,12 +192,12 @@ function Analytics() {
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow p-6">
+          <div className={`rounded-lg shadow p-6 ${isDark ? 'bg-gray-800' : 'bg-white'}`}>
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Total Notifications</p>
-                <p className="text-2xl font-bold text-gray-900">{analytics.totalNotifications}</p>
-                <p className="text-sm text-gray-500 mt-1">
+                <p className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Total Notifications</p>
+                <p className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>{analytics.totalNotifications}</p>
+                <p className={`text-sm mt-1 ${isDark ? 'text-gray-500' : 'text-gray-500'}`}>
                   {timeRange === '1d' ? 'Last 24 hours' : timeRange === '7d' ? 'Last 7 days' : 'Last 30 days'}
                 </p>
               </div>
@@ -205,14 +207,14 @@ function Analytics() {
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow p-6">
+          <div className={`rounded-lg shadow p-6 ${isDark ? 'bg-gray-800' : 'bg-white'}`}>
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Success Rate</p>
+                <p className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Success Rate</p>
                 <p className="text-2xl font-bold text-green-600">{analytics.successRate}%</p>
-                <p className="text-sm text-gray-500 mt-1">
-                  {analytics.totalNotifications > 0 ? 
-                    `${Math.round(analytics.totalNotifications * analytics.successRate / 100)} successful` : 
+                <p className={`text-sm mt-1 ${isDark ? 'text-gray-500' : 'text-gray-500'}`}>
+                  {analytics.totalNotifications > 0 ?
+                    `${Math.round(analytics.totalNotifications * analytics.successRate / 100)} successful` :
                     'No data'
                   }
                 </p>
@@ -223,14 +225,14 @@ function Analytics() {
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow p-6">
+          <div className={`rounded-lg shadow p-6 ${isDark ? 'bg-gray-800' : 'bg-white'}`}>
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Failed Rate</p>
+                <p className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Failed Rate</p>
                 <p className="text-2xl font-bold text-red-600">{(100 - analytics.successRate).toFixed(1)}%</p>
-                <p className="text-sm text-gray-500 mt-1">
-                  {analytics.totalNotifications > 0 ? 
-                    `${Math.round(analytics.totalNotifications * (100 - analytics.successRate) / 100)} failed` : 
+                <p className={`text-sm mt-1 ${isDark ? 'text-gray-500' : 'text-gray-500'}`}>
+                  {analytics.totalNotifications > 0 ?
+                    `${Math.round(analytics.totalNotifications * (100 - analytics.successRate) / 100)} failed` :
                     'No data'
                   }
                 </p>
