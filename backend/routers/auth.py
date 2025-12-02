@@ -20,15 +20,33 @@ router = APIRouter(prefix="/api/auth", tags=["authentication"])
 @router.post("/register", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
 def register(user: UserCreate, db: Session = Depends(get_db)):
     """Register a new user"""
-    # Check if user already exists
-    db_user = db.query(User).filter(
-        (User.email == user.email) | (User.username == user.username)
-    ).first()
-    
-    if db_user:
+    # Validate input
+    if not user.email or not user.username or not user.password:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Email or username already registered"
+            detail="Email, username, and password are required"
+        )
+    
+    if len(user.password) < 6:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Password must be at least 6 characters long"
+        )
+    
+    # Check if email already exists
+    existing_email = db.query(User).filter(User.email == user.email).first()
+    if existing_email:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Email already registered. Please use a different email or login if you already have an account."
+        )
+    
+    # Check if username already exists
+    existing_username = db.query(User).filter(User.username == user.username).first()
+    if existing_username:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Username already taken. Please choose a different username."
         )
     
     # Create new user

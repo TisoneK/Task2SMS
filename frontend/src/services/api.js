@@ -1,6 +1,9 @@
 import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+// Use the environment variable or default to direct backend URL
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
+
+console.log('API Base URL:', API_BASE_URL);
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -23,7 +26,7 @@ api.interceptors.request.use(
   }
 );
 
-// Handle 401 errors
+// Handle errors
 api.interceptors.response.use(
   (response) => response,
   (error) => {
@@ -31,6 +34,23 @@ api.interceptors.response.use(
       localStorage.removeItem('token');
       window.location.href = '/login';
     }
+    
+    // Enhanced error logging for debugging
+    console.error('API Error Details:', {
+      status: error.response?.status,
+      statusText: error.response?.statusText,
+      data: error.response?.data,
+      message: error.message,
+      code: error.code,
+      url: error.config?.url,
+      method: error.config?.method,
+      baseURL: error.config?.baseURL,
+    });
+    
+    if (error.code === 'ERR_NETWORK') {
+      console.error('Network Error - Backend may not be running or unreachable at:', API_BASE_URL);
+    }
+    
     return Promise.reject(error);
   }
 );

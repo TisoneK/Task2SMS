@@ -32,8 +32,13 @@ export const AuthProvider = ({ children }) => {
   };
 
   const register = async (email, username, password) => {
-    await authAPI.register({ email, username, password });
-    await login(username, password);
+    try {
+      await authAPI.register({ email, username, password });
+      await login(username, password);
+    } catch (error) {
+      // Re-throw with the original error for better error handling in components
+      throw error;
+    }
   };
 
   const logout = () => {
