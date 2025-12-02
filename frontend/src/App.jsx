@@ -8,6 +8,7 @@ import Dashboard from './pages/Dashboard';
 import TaskForm from './pages/TaskForm';
 import TaskDetails from './pages/TaskDetails';
 import Notifications from './pages/Notifications';
+import Analytics from './pages/Analytics';
 
 const PrivateRoute = ({ children }) => {
   const { user, loading } = useAuth();
@@ -94,6 +95,14 @@ function AppRoutes() {
           element={
             <PrivateRoute>
               <Notifications />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/analytics"
+          element={
+            <PrivateRoute>
+              <Analytics />
             </PrivateRoute>
           }
         />

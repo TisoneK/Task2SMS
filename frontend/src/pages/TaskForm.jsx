@@ -2,7 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import { tasksAPI } from '../services/api';
 import toast from 'react-hot-toast';
-import { ArrowLeft, Plus, X } from 'lucide-react';
+import { 
+  ArrowLeft, Plus, X, Database, Filter, Smartphone, ArrowRight,
+  Clock, Bell, Zap, CheckCircle
+} from 'lucide-react';
 
 function TaskForm() {
   const { id } = useParams();
@@ -108,15 +111,15 @@ function TaskForm() {
 
       if (isEdit) {
         await tasksAPI.update(id, submitData);
-        toast.success('Task updated successfully');
+        toast.success('Automation updated successfully');
       } else {
         await tasksAPI.create(submitData);
-        toast.success('Task created successfully');
+        toast.success('Automation created successfully');
       }
 
       navigate('/dashboard');
     } catch (error) {
-      toast.error(error.response?.data?.detail || 'Failed to save task');
+      toast.error(error.response?.data?.detail || 'Failed to save automation');
     } finally {
       setLoading(false);
     }
@@ -125,7 +128,7 @@ function TaskForm() {
   return (
     <div className="min-h-screen bg-gray-50">
       <header className="bg-white shadow">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <Link to="/dashboard" className="flex items-center gap-2 text-gray-600 hover:text-gray-900">
             <ArrowLeft className="w-5 h-5" />
             Back to Dashboard
@@ -133,200 +136,280 @@ function TaskForm() {
         </div>
       </header>
 
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <h1 className="text-2xl font-bold text-gray-900 mb-6">
-          {isEdit ? 'Edit Task' : 'Create New Task'}
-        </h1>
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            {isEdit ? 'Edit Automation' : 'Create New Automation'}
+          </h1>
+          <p className="text-gray-600">
+            Set up your SMS automation workflow with triggers, conditions, and actions
+          </p>
+        </div>
 
-        <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow p-6 space-y-6">
-          {/* Basic Info */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Task Name *
-            </label>
-            <input
-              type="text"
-              name="name"
-              required
-              value={formData.name}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-              placeholder="e.g., Lakers vs Bulls"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Description
-            </label>
-            <textarea
-              name="description"
-              value={formData.description}
-              onChange={handleChange}
-              rows={3}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-              placeholder="Task description..."
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Source Link (API URL)
-            </label>
-            <input
-              type="url"
-              name="source_link"
-              value={formData.source_link}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-              placeholder="https://api.example.com/data"
-            />
-          </div>
-
-          {/* Schedule */}
-          <div className="grid md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Schedule (Human Readable)
-              </label>
-              <input
-                type="text"
-                name="schedule_human"
-                value={formData.schedule_human}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                placeholder="e.g., every 1 hour"
-              />
+        {/* Workflow Visualization */}
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+          <div className="flex items-center justify-center gap-4 text-sm">
+            <div className="flex items-center gap-2 px-4 py-2 bg-blue-50 border border-blue-200 rounded-lg">
+              <Database className="w-5 h-5 text-blue-600" />
+              <span className="font-medium text-blue-900">Data Source</span>
             </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Schedule (Cron Expression)
-              </label>
-              <input
-                type="text"
-                name="schedule_cron"
-                value={formData.schedule_cron}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                placeholder="e.g., 0 * * * *"
-              />
+            <ArrowRight className="w-5 h-5 text-gray-400" />
+            <div className="flex items-center gap-2 px-4 py-2 bg-purple-50 border border-purple-200 rounded-lg">
+              <Filter className="w-5 h-5 text-purple-600" />
+              <span className="font-medium text-purple-900">Conditions</span>
+            </div>
+            <ArrowRight className="w-5 h-5 text-gray-400" />
+            <div className="flex items-center gap-2 px-4 py-2 bg-green-50 border border-green-200 rounded-lg">
+              <Smartphone className="w-5 h-5 text-green-600" />
+              <span className="font-medium text-green-900">SMS Action</span>
             </div>
           </div>
+        </div>
 
-          {/* Recipients */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Recipients (Phone Numbers)
-            </label>
-            <div className="flex gap-2 mb-2">
-              <input
-                type="tel"
-                value={recipientInput}
-                onChange={(e) => setRecipientInput(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addRecipient())}
-                className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                placeholder="+254712345678"
-              />
-              <button
-                type="button"
-                onClick={addRecipient}
-                className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
-              >
-                <Plus className="w-5 h-5" />
-              </button>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {formData.recipients.map((recipient, index) => (
-                <span
-                  key={index}
-                  className="inline-flex items-center gap-2 px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full"
-                >
-                  {recipient}
-                  <button
-                    type="button"
-                    onClick={() => removeRecipient(index)}
-                    className="hover:text-indigo-900"
-                  >
-                    <X className="w-4 h-4" />
-                  </button>
-                </span>
-              ))}
-            </div>
-          </div>
-
-          {/* Condition Rules */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Notification Condition
-            </label>
-            <select
-              value={conditionType}
-              onChange={(e) => setConditionType(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 mb-2"
-            >
-              <option value="always">Always send</option>
-              <option value="total_over">Total score over</option>
-              <option value="total_under">Total score under</option>
-              <option value="field_equals">Field equals value</option>
-              <option value="field_contains">Field contains text</option>
-              <option value="field_greater_than">Field greater than</option>
-              <option value="field_less_than">Field less than</option>
-            </select>
-
-            {conditionType !== 'always' && (
-              <div className="grid md:grid-cols-2 gap-4">
-                {['field_equals', 'field_contains', 'field_greater_than', 'field_less_than'].includes(conditionType) && (
-                  <input
-                    type="text"
-                    value={conditionField}
-                    onChange={(e) => setConditionField(e.target.value)}
-                    className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                    placeholder="Field name (e.g., status)"
-                  />
-                )}
+        <form onSubmit={handleSubmit} className="space-y-8">
+          {/* Step 1: Basic Info */}
+          <div className="bg-white rounded-lg shadow p-6">
+            <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center gap-2">
+              <div className="w-8 h-8 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center font-medium">1</div>
+              Basic Information
+            </h2>
+            
+            <div className="grid md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Automation Name *
+                </label>
                 <input
-                  type={['total_over', 'total_under', 'field_greater_than', 'field_less_than'].includes(conditionType) ? 'number' : 'text'}
-                  value={conditionValue}
-                  onChange={(e) => setConditionValue(e.target.value)}
-                  className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                  placeholder="Value"
+                  type="text"
+                  name="name"
+                  required
+                  value={formData.name}
+                  onChange={handleChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                  placeholder="e.g., Game Score Alerts"
                 />
               </div>
-            )}
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Data Source URL
+                </label>
+                <input
+                  type="url"
+                  name="source_link"
+                  value={formData.source_link}
+                  onChange={handleChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                  placeholder="https://api.example.com/data"
+                />
+              </div>
+            </div>
+
+            <div className="mt-6">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Description
+              </label>
+              <textarea
+                name="description"
+                value={formData.description}
+                onChange={handleChange}
+                rows={3}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                placeholder="Describe what this automation does and when it should trigger..."
+              />
+            </div>
           </div>
 
-          {/* Message Template */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Message Template
-            </label>
-            <textarea
-              name="message_template"
-              value={formData.message_template}
-              onChange={handleChange}
-              rows={3}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-              placeholder="Use {field_name} for dynamic values, e.g., {home_team} {home_score} - {away_team} {away_score}"
-            />
-            <p className="text-sm text-gray-500 mt-1">
-              Use curly braces for dynamic fields from your data source
-            </p>
+          {/* Step 2: Trigger (Schedule) */}
+          <div className="bg-white rounded-lg shadow p-6">
+            <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center gap-2">
+              <div className="w-8 h-8 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center font-medium">2</div>
+              Trigger Schedule
+            </h2>
+            
+            <div className="grid md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Human-Readable Schedule
+                </label>
+                <input
+                  type="text"
+                  name="schedule_human"
+                  value={formData.schedule_human}
+                  onChange={handleChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                  placeholder="e.g., every 1 hour, daily at 9am"
+                />
+                <p className="text-sm text-gray-500 mt-1">
+                  Describe when this should run in plain language
+                </p>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Cron Expression
+                </label>
+                <input
+                  type="text"
+                  name="schedule_cron"
+                  value={formData.schedule_cron}
+                  onChange={handleChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                  placeholder="e.g., 0 * * * *"
+                />
+                <p className="text-sm text-gray-500 mt-1">
+                  Optional: Use cron format for precise scheduling
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Step 3: Conditions */}
+          <div className="bg-white rounded-lg shadow p-6">
+            <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center gap-2">
+              <div className="w-8 h-8 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center font-medium">3</div>
+              Trigger Conditions
+            </h2>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                When should this automation trigger?
+              </label>
+              <select
+                value={conditionType}
+                onChange={(e) => setConditionType(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 mb-4"
+              >
+                <option value="always">Always trigger when data is fetched</option>
+                <option value="total_over">When total score is over a value</option>
+                <option value="total_under">When total score is under a value</option>
+                <option value="field_equals">When a field equals a specific value</option>
+                <option value="field_contains">When a field contains specific text</option>
+                <option value="field_greater_than">When a field is greater than a value</option>
+                <option value="field_less_than">When a field is less than a value</option>
+              </select>
+
+              {conditionType !== 'always' && (
+                <div className="grid md:grid-cols-2 gap-4 p-4 bg-gray-50 rounded-lg">
+                  {['field_equals', 'field_contains', 'field_greater_than', 'field_less_than'].includes(conditionType) && (
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Field Name
+                      </label>
+                      <input
+                        type="text"
+                        value={conditionField}
+                        onChange={(e) => setConditionField(e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                        placeholder="e.g., status, score, temperature"
+                      />
+                    </div>
+                  )}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      {['total_over', 'total_under', 'field_greater_than', 'field_less_than'].includes(conditionType) ? 'Value' : 'Text/Value'}
+                    </label>
+                    <input
+                      type={['total_over', 'total_under', 'field_greater_than', 'field_less_than'].includes(conditionType) ? 'number' : 'text'}
+                      value={conditionValue}
+                      onChange={(e) => setConditionValue(e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                      placeholder="Enter value to compare against"
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Step 4: Action (SMS) */}
+          <div className="bg-white rounded-lg shadow p-6">
+            <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center gap-2">
+              <div className="w-8 h-8 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center font-medium">4</div>
+              SMS Action
+            </h2>
+            
+            {/* Recipients */}
+            <div className="mb-6">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Recipients (Phone Numbers)
+              </label>
+              <div className="flex gap-2 mb-3">
+                <input
+                  type="tel"
+                  value={recipientInput}
+                  onChange={(e) => setRecipientInput(e.target.value)}
+                  onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addRecipient())}
+                  className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                  placeholder="+254712345678"
+                />
+                <button
+                  type="button"
+                  onClick={addRecipient}
+                  className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
+                >
+                  <Plus className="w-5 h-5" />
+                </button>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {formData.recipients.map((recipient, index) => (
+                  <span
+                    key={index}
+                    className="inline-flex items-center gap-2 px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full"
+                  >
+                    {recipient}
+                    <button
+                      type="button"
+                      onClick={() => removeRecipient(index)}
+                      className="hover:text-indigo-900"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* Message Template */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                SMS Message Template
+              </label>
+              <textarea
+                name="message_template"
+                value={formData.message_template}
+                onChange={handleChange}
+                rows={4}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                placeholder="Use {field_name} for dynamic values, e.g., {home_team} {home_score} - {away_team} {away_score}"
+              />
+              <p className="text-sm text-gray-500 mt-1">
+                Use curly braces for dynamic fields from your data source
+              </p>
+            </div>
           </div>
 
           {/* Active Status */}
-          <div className="flex items-center">
-            <input
-              type="checkbox"
-              name="is_active"
-              id="is_active"
-              checked={formData.is_active}
-              onChange={handleChange}
-              className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
-            />
-            <label htmlFor="is_active" className="ml-2 block text-sm text-gray-900">
-              Task is active
-            </label>
+          <div className="bg-white rounded-lg shadow p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-lg font-medium text-gray-900">Activation Status</h3>
+                <p className="text-sm text-gray-600">Control whether this automation is active or paused</p>
+              </div>
+              <div className="flex items-center">
+                <input
+                  type="checkbox"
+                  name="is_active"
+                  id="is_active"
+                  checked={formData.is_active}
+                  onChange={handleChange}
+                  className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                />
+                <label htmlFor="is_active" className="ml-2 block text-sm text-gray-900">
+                  {formData.is_active ? 'Automation is active' : 'Automation is paused'}
+                </label>
+              </div>
+            </div>
           </div>
 
           {/* Submit */}
@@ -334,13 +417,23 @@ function TaskForm() {
             <button
               type="submit"
               disabled={loading}
-              className="flex-1 py-2 px-4 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
+              className="flex-1 py-3 px-6 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 flex items-center justify-center gap-2"
             >
-              {loading ? 'Saving...' : isEdit ? 'Update Task' : 'Create Task'}
+              {loading ? (
+                <>
+                  <Clock className="w-5 h-5 animate-spin" />
+                  Saving...
+                </>
+              ) : (
+                <>
+                  <CheckCircle className="w-5 h-5" />
+                  {isEdit ? 'Update Automation' : 'Create Automation'}
+                </>
+              )}
             </button>
             <Link
               to="/dashboard"
-              className="px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50"
+              className="px-6 py-3 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50"
             >
               Cancel
             </Link>
@@ -352,4 +445,3 @@ function TaskForm() {
 }
 
 export default TaskForm;
-
