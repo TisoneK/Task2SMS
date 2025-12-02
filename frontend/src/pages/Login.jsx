@@ -30,7 +30,7 @@ function Login() {
 
   return (
     <div className={`min-h-screen flex items-center justify-center p-4 ${isDark ? 'bg-gray-900' : 'bg-gradient-to-br from-blue-50 to-indigo-100'}`}>
-      <div className={`max-w-md w-full rounded-lg shadow-xl p-8 ${isDark ? 'bg-gray-800' : 'bg-white'}`}>
+      <div className={`max-w-sm md:max-w-md w-full rounded-lg shadow-xl p-8 ${isDark ? 'bg-gray-800' : 'bg-white'}`}>
         <div className="text-center mb-8">
           <div className="flex justify-center mb-4">
             <MessageSquare className={`w-12 h-12 ${isDark ? 'text-indigo-400' : 'text-indigo-600'}`} />

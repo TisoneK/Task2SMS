@@ -121,15 +121,15 @@ function Dashboard() {
       {/* Header */}
       <header className={`${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white shadow-sm border-b'}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex justify-between items-center">
-            <div className="flex items-center gap-3">
+          <div className="flex flex-col sm:flex-row justify-between items-center sm:items-start">
+            <div className="flex flex-col sm:flex-row items-center gap-3 mb-4 sm:mb-0">
               <div className="flex items-center gap-2">
                 <Zap className={`w-8 h-8 ${isDark ? 'text-indigo-400' : 'text-indigo-600'}`} />
                 <h1 className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>Task2SMS</h1>
               </div>
               <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Automation Platform</span>
             </div>
-            <div className="flex gap-4 items-center">
+            <div className="flex flex-wrap justify-center sm:justify-end gap-2 sm:gap-4 items-center">
               <button
                 onClick={toggleTheme}
                 className={`flex items-center gap-2 px-3 py-2 rounded-md transition-colors ${
@@ -143,36 +143,36 @@ function Dashboard() {
               </button>
               <Link
                 to="/analytics"
-                className={`flex items-center gap-2 px-4 py-2 rounded-md transition-colors ${
+                className={`flex items-center gap-2 px-2 py-1 sm:px-4 sm:py-2 rounded-md transition-colors ${
                   isDark
                     ? 'text-gray-300 hover:text-indigo-400'
                     : 'text-gray-700 hover:text-indigo-600'
                 }`}
               >
                 <BarChart3 className="w-5 h-5" />
-                Analytics
+                <span className="hidden sm:inline">Analytics</span>
               </Link>
               <Link
                 to="/notifications"
-                className={`flex items-center gap-2 px-4 py-2 rounded-md transition-colors ${
+                className={`flex items-center gap-2 px-2 py-1 sm:px-4 sm:py-2 rounded-md transition-colors ${
                   isDark
                     ? 'text-gray-300 hover:text-indigo-400'
                     : 'text-gray-700 hover:text-indigo-600'
                 }`}
               >
                 <Bell className="w-5 h-5" />
-                Notifications
+                <span className="hidden sm:inline">Notifications</span>
               </Link>
               <button
                 onClick={handleLogout}
-                className={`flex items-center gap-2 px-4 py-2 rounded-md transition-colors ${
+                className={`flex items-center gap-2 px-2 py-1 sm:px-4 sm:py-2 rounded-md transition-colors ${
                   isDark
                     ? 'text-gray-300 hover:text-red-400'
                     : 'text-gray-700 hover:text-red-600'
                 }`}
               >
                 <LogOut className="w-5 h-5" />
-                Logout
+                <span className="hidden sm:inline">Logout</span>
               </button>
             </div>
           </div>
@@ -241,14 +241,14 @@ function Dashboard() {
         </div>
 
         {/* Automations Section */}
-        <div className="mb-6 flex justify-between items-center">
-          <div>
+        <div className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center">
+          <div className="mb-4 sm:mb-0">
             <h2 className={`text-xl font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>Your Automations</h2>
             <p className={`text-sm mt-1 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Create and manage your SMS automation workflows</p>
           </div>
           <Link
             to="/tasks/new"
-            className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
+            className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 w-full sm:w-auto justify-center"
           >
             <Plus className="w-5 h-5" />
             Create Automation
@@ -342,7 +342,7 @@ function Dashboard() {
 
                 {/* Automation Details */}
                 <div className={`px-6 py-4 ${isDark ? 'bg-gray-700' : 'bg-gray-50'}`}>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-sm">
                     <div className={`flex items-center gap-2 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
                       <Clock className="w-4 h-4" />
                       <span>Schedule: {task.schedule_human || task.schedule_cron || 'Manual'}</span>
@@ -360,7 +360,7 @@ function Dashboard() {
 
                 {/* Actions */}
                 <div className={`px-6 py-3 border-t ${isDark ? 'bg-gray-700 border-gray-600' : 'bg-gray-50 border-gray-200'}`}>
-                  <div className="flex gap-2">
+                  <div className="flex flex-wrap gap-2">
                     <Link
                       to={`/tasks/${task.id}`}
                       className={`flex items-center gap-2 px-3 py-2 text-sm rounded-md hover:transition-colors ${
