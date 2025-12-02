@@ -171,6 +171,8 @@ pip install -r requirements.txt
 # Create .env file
 cp .env.example .env
 # Edit .env with your configuration
+# For development, uncomment the SQLite line in .env:
+# DATABASE_URL=sqlite:///./task2sms.db
 
 # Run the backend
 python main.py
