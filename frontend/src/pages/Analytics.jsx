@@ -130,33 +130,33 @@ function Analytics() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-gray-600">Loading analytics...</div>
+      <div className={`min-h-screen flex items-center justify-center ${isDark ? 'bg-gray-900' : 'bg-gray-50'}`}>
+        <div className={isDark ? 'text-gray-400' : 'text-gray-600'}>Loading analytics...</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className={`min-h-screen ${isDark ? 'bg-gray-900' : 'bg-gray-50'}`}>
       {/* Header */}
-      <header className="bg-white shadow-sm border-b">
+      <header className={`${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white shadow-sm border-b'}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-3">
-              <Link to="/dashboard" className="flex items-center gap-2 text-gray-600 hover:text-gray-900">
+              <Link to="/dashboard" className={`flex items-center gap-2 ${isDark ? 'text-gray-300 hover:text-gray-100' : 'text-gray-600 hover:text-gray-900'}`}>
                 <ArrowLeft className="w-5 h-5" />
                 Back to Dashboard
               </Link>
               <div className="flex items-center gap-2">
-                <BarChart3 className="w-6 h-6 text-indigo-600" />
-                <h1 className="text-2xl font-bold text-gray-900">Analytics</h1>
+                <BarChart3 className={`w-6 h-6 ${isDark ? 'text-indigo-400' : 'text-indigo-600'}`} />
+                <h1 className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>Analytics</h1>
               </div>
             </div>
             <div className="flex items-center gap-4">
               <select
                 value={timeRange}
                 onChange={(e) => setTimeRange(e.target.value)}
-                className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className={`px-3 py-2 border rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}
               >
                 <option value="1d">Last 24 hours</option>
                 <option value="7d">Last 7 days</option>
@@ -164,7 +164,7 @@ function Analytics() {
               </select>
               <button
                 onClick={handleLogout}
-                className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:text-red-600"
+                className={`flex items-center gap-2 px-4 py-2 rounded-md transition-colors ${isDark ? 'text-gray-300 hover:text-red-400' : 'text-gray-700 hover:text-red-600'}`}
               >
                 Logout
               </button>
@@ -177,17 +177,17 @@ function Analytics() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Overview Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white rounded-lg shadow p-6">
+          <div className={`${isDark ? 'bg-gray-800' : 'bg-white'} rounded-lg shadow p-6`}>
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Total Automations</p>
-                <p className="text-2xl font-bold text-gray-900">{analytics.totalTasks}</p>
-                <p className="text-sm text-gray-500 mt-1">
+                <p className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Total Automations</p>
+                <p className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>{analytics.totalTasks}</p>
+                <p className={`text-sm mt-1 ${isDark ? 'text-gray-500' : 'text-gray-500'}`}>
                   {analytics.activeTasks} active
                 </p>
               </div>
-              <div className="p-3 bg-indigo-100 rounded-full">
-                <Zap className="w-6 h-6 text-indigo-600" />
+              <div className={`p-3 rounded-full ${isDark ? 'bg-indigo-900' : 'bg-indigo-100'}`}>
+                <Zap className={`w-6 h-6 ${isDark ? 'text-indigo-400' : 'text-indigo-600'}`} />
               </div>
             </div>
           </div>
@@ -246,15 +246,15 @@ function Analytics() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
           {/* Daily Activity Chart */}
-          <div className="bg-white rounded-lg shadow p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Daily Activity</h2>
+          <div className={`${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white'} rounded-lg shadow p-6`}>
+            <h2 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'} mb-4`}>Daily Activity</h2>
             <div className="space-y-3">
               {analytics.dailyStats.map((day, index) => (
                 <div key={index} className="flex items-center gap-4">
-                  <div className="w-16 text-sm text-gray-600">{day.date}</div>
+                  <div className={`w-16 text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>{day.date}</div>
                   <div className="flex-1 flex items-center gap-2">
-                    <div className="flex-1 bg-gray-200 rounded-full h-6 relative">
-                      <div 
+                    <div className={`flex-1 rounded-full h-6 relative ${isDark ? 'bg-gray-700' : 'bg-gray-200'}`}>
+                      <div
                         className="absolute left-0 top-0 h-full bg-green-500 rounded-full flex items-center justify-end pr-2"
                         style={{ width: `${day.total > 0 ? (day.successful / day.total * 100) : 0}%` }}
                       >
@@ -263,7 +263,7 @@ function Analytics() {
                         )}
                       </div>
                       {day.failed > 0 && (
-                        <div 
+                        <div
                           className="absolute right-0 top-0 h-full bg-red-500 rounded-full flex items-center pl-2"
                           style={{ width: `${day.total > 0 ? (day.failed / day.total * 100) : 0}%` }}
                         >
@@ -272,40 +272,40 @@ function Analytics() {
                       )}
                     </div>
                   </div>
-                  <div className="w-12 text-sm text-gray-900 font-medium">{day.total}</div>
+                  <div className={`w-12 text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>{day.total}</div>
                 </div>
               ))}
             </div>
-            <div className="flex items-center gap-4 mt-4 pt-4 border-t">
+            <div className={`flex items-center gap-4 mt-4 pt-4 ${isDark ? 'border-t border-gray-700' : 'border-t'}`}>
               <div className="flex items-center gap-2">
                 <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                <span className="text-sm text-gray-600">Successful</span>
+                <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Successful</span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                <span className="text-sm text-gray-600">Failed</span>
+                <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Failed</span>
               </div>
             </div>
           </div>
 
           {/* Provider Distribution */}
-          <div className="bg-white rounded-lg shadow p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Provider Distribution</h2>
+          <div className={`${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white'} rounded-lg shadow p-6`}>
+            <h2 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'} mb-4`}>Provider Distribution</h2>
             <div className="space-y-3">
               {Object.entries(analytics.notificationsByProvider).map(([provider, count]) => (
                 <div key={provider} className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <Smartphone className="w-4 h-4 text-gray-600" />
-                    <span className="text-sm font-medium text-gray-900 capitalize">{provider.replace('_', ' ')}</span>
+                    <Smartphone className={`w-4 h-4 ${isDark ? 'text-gray-400' : 'text-gray-600'}`} />
+                    <span className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'} capitalize`}>{provider.replace('_', ' ')}</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <div className="w-24 bg-gray-200 rounded-full h-2">
-                      <div 
+                    <div className={`w-24 rounded-full h-2 ${isDark ? 'bg-gray-700' : 'bg-gray-200'}`}>
+                      <div
                         className="h-full bg-indigo-500 rounded-full"
                         style={{ width: `${(count / analytics.totalNotifications * 100)}%` }}
                       ></div>
                     </div>
-                    <span className="text-sm text-gray-600 w-12 text-right">{count}</span>
+                    <span className={`text-sm w-12 text-right ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>{count}</span>
                   </div>
                 </div>
               ))}
@@ -314,29 +314,29 @@ function Analytics() {
         </div>
 
         {/* Recent Activity */}
-        <div className="bg-white rounded-lg shadow">
-          <div className="p-6 border-b border-gray-200">
-            <h2 className="text-lg font-semibold text-gray-900">Recent Activity</h2>
+        <div className={`${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white'} rounded-lg shadow`}>
+          <div className={`p-6 border-b ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
+            <h2 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>Recent Activity</h2>
           </div>
-          <div className="divide-y divide-gray-200">
+          <div className={`divide-y ${isDark ? 'divide-gray-700' : 'divide-gray-200'}`}>
             {analytics.recentActivity.length === 0 ? (
-              <div className="p-6 text-center text-gray-600">
+              <div className={`p-6 text-center ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
                 No recent activity
               </div>
             ) : (
               analytics.recentActivity.map((notification) => (
-                <div key={notification.id} className="p-4 hover:bg-gray-50">
+                <div key={notification.id} className={`p-4 ${isDark ? 'hover:bg-gray-700' : 'hover:bg-gray-50'}`}>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       {getStatusIcon(notification.status)}
                       <div>
-                        <p className="text-sm font-medium text-gray-900">{notification.recipient}</p>
-                        <p className="text-sm text-gray-600">{notification.message.substring(0, 100)}...</p>
+                        <p className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>{notification.recipient}</p>
+                        <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>{notification.message.substring(0, 100)}...</p>
                       </div>
                     </div>
                     <div className="text-right">
-                      <p className="text-sm text-gray-600 capitalize">{notification.provider.replace('_', ' ')}</p>
-                      <p className="text-xs text-gray-500">
+                      <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} capitalize`}>{notification.provider.replace('_', ' ')}</p>
+                      <p className={`text-xs ${isDark ? 'text-gray-500' : 'text-gray-500'}`}>
                         {new Date(notification.created_at).toLocaleString()}
                       </p>
                     </div>

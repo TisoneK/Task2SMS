@@ -12,20 +12,17 @@ fi
 # Start with Docker Compose
 if command -v docker-compose &> /dev/null; then
     echo "Starting with Docker Compose..."
-    docker-compose up -d
+    # Backend setup and start
+    (cd backend && [ ! -d "venv" ] && python3 -m venv venv && source venv/bin/activate && pip install -r requirements.txt; source venv/bin/activate && uvicorn main:app --reload) &
+    
+    # Frontend setup and start
+    (cd frontend && [ ! -d "node_modules" ] && npm install; npm run dev) &
     echo ""
     echo "Task2SMS is running!"
     echo "Frontend: http://localhost"
     echo "Backend API: http://localhost:8000"
     echo "API Docs: http://localhost:8000/docs"
     echo ""
-    echo "To view logs: docker-compose logs -f"
-    echo "To stop: docker-compose down"
-else
-    echo "Docker Compose not found. Please install Docker and Docker Compose."
-    echo ""
-    echo "Alternatively, run manually:"
-    echo "1. Backend: cd backend && python main.py"
-    echo "2. Frontend: cd frontend && npm run dev"
+    echo "To stop: Close the terminal windows for frontend and backend."
 fi
 
